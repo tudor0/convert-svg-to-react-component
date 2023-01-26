@@ -1,11 +1,129 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
+import Head from "next/head";
+import { useEffect, useState } from "react";
 
-const inter = Inter({ subsets: ['latin'] })
+interface FileProps {
+  file: File;
+  code: string;
+}
+
+const DownloadButton: React.FC<FileProps> = ({ code, file }) => {
+  const [component, setComponent] = useState("");
+  useEffect(() => {
+    let componentName = file.name.split(".")[0];
+    // check if the file name is a valid React component name
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(componentName)) {
+      // change the file name to a valid React component name
+      componentName = componentName.replace(/[^A-Za-z0-9_]/g, "");
+    }
+    // check if the component name starts with a number
+    if (/^\d/.test(componentName)) {
+      componentName = componentName.replace(/^\d+/, "");
+    }
+    const widthRegex = /width="(\d+)"/;
+    const heightRegex = /height="(\d+)"/;
+    const width = code.match(widthRegex);
+    const height = code.match(heightRegex);
+    const widthValue = width && width[1];
+    const heightValue = height && height[1];
+    if (!widthValue || !heightValue) {
+      alert(
+        `The SVG file ${file.name} does not have a width or height attribute`
+      );
+      return;
+    }
+
+    let modifiedCode = code
+      .replace(
+        /<svg/,
+        `<svg width={width} height={height} className={className} stroke={stroke} style={style}`
+      )
+      .replace(/width=".*?"/gi, "")
+      .replace(/height=".*?"/gi, "")
+      .replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+
+    const styleRegex = /style="(.*?)"/g;
+    let match;
+    while ((match = styleRegex.exec(modifiedCode)) !== null) {
+      const styleString = match[1];
+      const styles = styleString.split(";").reduce((acc: any, cur) => {
+        const [property, value] = cur.split(":");
+        acc[property] = value;
+        return acc;
+      }, {});
+
+      modifiedCode = modifiedCode.replace(
+        match[0],
+        `style={{ ${Object.entries(styles)
+          .map(([key, value]) => `${key}: "${value}"`)
+          .join(", ")} }}`
+      );
+    }
+    const componentContent = `
+      import React from "react";
+      
+      interface IconProps {
+        width?: number;
+        height?: number;
+        stroke?: string;
+        className?: string;
+        style?: React.CSSProperties;
+      }
+      const ${componentName}: React.FC<IconProps> = ({
+        width = ${widthValue},
+        height = ${heightValue},
+        stroke = "currentColor",
+        className,
+        style ,
+      }) => {
+        return (
+          ${modifiedCode}
+        );
+
+      };
+
+      export default ${componentName};
+      `;
+    setComponent(componentContent);
+  }, [file]);
+  const handleDownload = () => {
+    const componentBlob = new Blob([component], { type: "text/plain" });
+    const downloadLink = document.createElement("a");
+    downloadLink.href = URL.createObjectURL(componentBlob);
+    downloadLink.download = `${file.name}.tsx`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  };
+  return (
+    <button onClick={handleDownload}>Download {file.name} component</button>
+  );
+};
 
 export default function Home() {
+  const [files, setFiles] = useState<FileProps[]>([]);
+  const [converted, setConverted] = useState(false);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = event.target.files;
+    if (!selectedFiles) return;
+
+    const fileArray: FileProps[] = [];
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles.item(i);
+      if (!file) continue;
+      if (file.type !== "image/svg+xml") {
+        alert(`${file.name} is not an SVG file`);
+        continue;
+      }
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = () => {
+        fileArray.push({ file, code: reader.result as string });
+        if (fileArray.length === selectedFiles.length) setFiles(fileArray);
+      };
+    }
+  };
+
   return (
     <>
       <Head>
@@ -14,110 +132,34 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.tsx</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
+      <input
+        type="file"
+        onChange={handleFileChange}
+        multiple={true}
+        accept="image/svg+xml"
+      />
+      <button onClick={() => setConverted(true)} disabled={files.length === 0}>
+        Convert to components
+      </button>
+      {converted && (
+        <>
+          {files.map(({ file, code }) => (
+            <DownloadButton key={file.name} file={file} code={code} />
+          ))}
+        </>
+      )}
+      {files.map((file, index) => (
+        <div key={index}>
+          <p>File selected: {file.file.name}</p>
+          <div
+            dangerouslySetInnerHTML={{ __html: file.code }}
+            style={{
+              width: "100%",
+              height: "100%"
+            }}
           />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
         </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+      ))}
     </>
-  )
+  );
 }
