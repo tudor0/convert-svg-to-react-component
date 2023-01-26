@@ -1,38 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+#Welcome
 
-## Getting Started
+Are you sick of creating react components for each svg file you use?
 
-First, run the development server:
+You have come to the **right** place :)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+This site is made to solve this issue.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The project is a basic NextJS app, using yarn.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Run yarn, then yarn dev to start.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Now, on [localhost:3000](localhost:3000 "localhost:3000"), you will see the project.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+When writing this readme, the styling is nothing amazing, but it will get better.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Click on "Choose Files", add some svgs, press "Convert to components", then some buttons will appear, one for each svg that you have added. Clicking them will generate a react + typescript component containing your svg.
 
-## Learn More
+#### For any suggestions or issues please open an issue.
+#### *This Project Is Still Wip, So There May Be Bugs***
 
-To learn more about Next.js, take a look at the following resources:
+# Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Props
+Generated components accept these props: 
+1. width
+2. height
+3. stroke
+4. className
+5. style
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+All these props are optional and are added to the first svg element.
 
-## Deploy on Vercel
+## Property fixing
+When editing an svg, properties like stroke-width are valid. In react components, this is not the case, so all these instances are automatically fixed.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This means: stroke-width -> strokeWidth.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Style fixing
+When editing an svg, properties like 
+style="fill:#f2a50f;fill-opacity:1;fill-rule:evenodd;stroke:none"are valid. In react components, this is not the case, so the style tag is automatically changed to respect react css properties.
+This means: style="fill:#f2a50f;fill-opacity:1;fill-rule:evenodd;stroke:none" -> 
+style={{ fill: "#f2a50f", fillOpacity: "1", fillRule: "evenodd", stroke: "none" }}
