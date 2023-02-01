@@ -41,3 +41,5 @@ When editing an svg, properties like
 style="fill:#f2a50f;fill-opacity:1;fill-rule:evenodd;stroke:none"are valid. In react components, this is not the case, so the style tag is automatically changed to respect react css properties.
 This means: style="fill:#f2a50f;fill-opacity:1;fill-rule:evenodd;stroke:none" -> 
 style={{ fill: "#f2a50f", fillOpacity: "1", fillRule: "evenodd", stroke: "none" }}
+
+## You can now change Component's names!
