@@ -1,6 +1,6 @@
 import SvgCard from "@/components/SvgCard";
 import { FileProps } from "@/types/types";
-import handleFileChange from "@/utils/handleFileChange";
+import handleFileChange from "@utils/handleFileChange";
 import { ChangeEvent, useState } from "react";
 
 export default function Home() {

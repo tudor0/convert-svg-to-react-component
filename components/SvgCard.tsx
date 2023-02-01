@@ -1,6 +1,6 @@
 import { SvgCardProps } from "@/types/types";
-import modifyString from "@/utils/modifyString";
-import createComponentCode from "@/utils/createComponentCode";
+import modifyString from "@utils/modifyString";
+import createComponentCode from "@utils/createComponentCode";
 import { useEffect, useState } from "react";
 import DownloadFileButton from "./DownloadFileButton";
 
