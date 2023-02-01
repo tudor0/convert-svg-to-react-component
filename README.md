@@ -1,5 +1,9 @@
 # Welcome
 
+## Quick Link
+
+https://tudordev.notion.site/tudordev/c9ea155e498e474c9a7c09d76701dd1a?v=13c6d78a86b84bb0b986201e39a6aaae
+
 Are you sick of creating react components for each svg file you use?
 
 You have come to the **right** place :)
