@@ -1,7 +1,7 @@
 import SvgCard from "@/components/SvgCard";
 import { FileProps } from "@/types/types";
 import handleFileChange from "@/utils/handleFileChange";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 export default function Home() {
   const [files, setFiles] = useState<FileProps[]>([]);
@@ -24,9 +24,15 @@ export default function Home() {
         Convert to components
       </button>
       <div>
-        {files.map(({ file, code }, index) => (
-          <SvgCard code={code} file={file} key={index} converted={converted} />
-        ))}
+        {files.length > 0 &&
+          files.map(({ file, code }, index) => (
+            <SvgCard
+              code={code}
+              file={file}
+              key={index}
+              converted={converted}
+            />
+          ))}
       </div>
     </>
   );

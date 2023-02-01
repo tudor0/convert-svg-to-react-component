@@ -11,13 +11,20 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
     return finalName === "" ? "Icon" : finalName;
   };
 
-  const [componentName, setComponentName] = useState(
-    createInitialComponentName()
-  );
+  const [componentName, setComponentName] = useState<string | null>(null);
   const [componentCode, setComponentCode] = useState<string | null>("");
 
   useEffect(() => {
-    if (converted) {
+    setComponentName(createInitialComponentName());
+
+    return () => {
+      setComponentName(null);
+      setComponentCode(null);
+    };
+  }, [code, file]);
+
+  useEffect(() => {
+    if (converted && componentName) {
       setComponentCode(createComponentCode(code, componentName));
       return;
     }
@@ -27,14 +34,14 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   const handleChangeComponentName = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const validString = modifyString(e.target.value).replace(/[^\w\s]/gi, "");
-    setComponentName(() => {
-      return validString;
-    });
+    const validString = modifyString(e.target.value)
+      .replace(/[^\w\s]/gi, "")
+      .replaceAll(" ", "");
+    setComponentName(validString);
   };
 
   const handleBlurCheck = () => {
-    if (componentName.length === 0) {
+    if (componentName && componentName.length === 0) {
       setComponentName("Icon");
     }
   };
@@ -46,7 +53,7 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
         type="text"
         onChange={handleChangeComponentName}
         onBlur={handleBlurCheck}
-        value={componentName}
+        value={componentName || ""}
       />
       <div
         dangerouslySetInnerHTML={{ __html: code }}
@@ -58,7 +65,7 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
       {converted && componentCode !== null && (
         <DownloadFileButton
           componentCode={componentCode}
-          componentName={componentName}
+          componentName={componentName || ""}
         />
       )}
     </>
