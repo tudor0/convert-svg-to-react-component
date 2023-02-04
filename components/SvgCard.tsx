@@ -59,7 +59,9 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
         dangerouslySetInnerHTML={{ __html: code }}
         style={{
           width: "100%",
-          height: "100%"
+          height: "100%",
+          maxWidth: "200px",
+          maxHeight: "200px"
         }}
       />
       {converted && componentCode !== null && (
