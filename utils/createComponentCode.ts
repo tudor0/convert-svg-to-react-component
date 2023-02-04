@@ -1,6 +1,6 @@
 const createComponentCode = (code: string, componentName: string) => {
-  const widthRegex = /width="(\d+)"/;
-  const heightRegex = /height="(\d+)"/;
+  const widthRegex = /width="(\d+\S+)"/;
+  const heightRegex = /height="(\d+\S+)"/;
   const width = code.match(widthRegex);
   const height = code.match(heightRegex);
   const widthValue = width && width[1];
@@ -12,16 +12,17 @@ const createComponentCode = (code: string, componentName: string) => {
     return null;
   }
 
-  let modifiedCode = code.replace(/width=".*?"/i, "");
-  modifiedCode = modifiedCode.replace(/height=".*?"/i, "");
-  modifiedCode = modifiedCode.replace(/viewBox=".*?"/i, "");
-  modifiedCode = modifiedCode.replace(
-    /<svg/,
-    "<svg width={width} height={height} className={className} stroke={stroke} style={style} viewBox={`0 0 ${width} ${height}`}"
-  );
-  modifiedCode = modifiedCode.replaceAll(/-([a-z])/g, (_, letter) =>
-    letter.toUpperCase()
-  );
+  let modifiedCode = code
+    .replace(/width=".*?"/i, "")
+    .replace(/height=".*?"/i, "")
+    .replace(/viewBox=".*?"/i, "")
+    .replace(
+      /<svg/,
+      "<svg width={width} height={height} className={className} stroke={stroke} style={style} viewBox={`0 0 ${width} ${height}`}"
+    )
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replaceAll(/-([a-z])/g, (_, letter) => letter.toUpperCase())
+    .replace(/<\?xml[^?]*\?>/g, "");
 
   const styleRegex = /style="(.*?)"/g;
   let match;
@@ -42,28 +43,28 @@ const createComponentCode = (code: string, componentName: string) => {
   }
 
   const componentContent = `
-        import React from "react";
-        
-        interface IconProps {
-          width?: number;
-          height?: number;
-          stroke?: string;
-          className?: string;
-          style?: React.CSSProperties;
-        }
-        const ${componentName}: React.FC<IconProps> = ({
-          width = ${widthValue},
-          height = ${heightValue},
-          stroke = "none",
-          className,
-          style,
-        }) => {
-          return (
-            ${modifiedCode}
-          );
-        };
-        export default ${componentName};
-        `;
+    import React from "react";
+    
+    interface IconProps {
+      width?: number;
+      height?: number;
+      stroke?: string;
+      className?: string;
+      style?: React.CSSProperties;
+    }
+    const ${componentName}: React.FC<IconProps> = ({
+      width = "${widthValue}",
+      height = "${heightValue}",
+      stroke = "none",
+      className,
+      style,
+    }) => {
+      return (
+        ${modifiedCode}
+      );
+    };
+    export default ${componentName};
+    `;
   return componentContent;
 };
 
