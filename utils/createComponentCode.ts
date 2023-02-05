@@ -75,17 +75,23 @@ const createComponentCode = (code: string, componentName: string) => {
     export default ${componentName};
     `;
 
-  let formattedCode = prettier.format(componentContent, {
-    printWidth: 80,
-    singleQuote: true,
-    jsxSingleQuote: true,
-    trailingComma: "es5",
-    parser: "typescript",
-    bracketSpacing: true,
-    plugins: [parserTypeScript]
-  });
+  try {
+    let formattedCode = prettier.format(componentContent, {
+      printWidth: 80,
+      singleQuote: true,
+      jsxSingleQuote: true,
+      trailingComma: "es5",
+      parser: "typescript",
+      bracketSpacing: true,
+      plugins: [parserTypeScript]
+    });
 
-  return formattedCode;
+    return formattedCode;
+  } catch (error) {
+    console.error(error);
+
+    return componentContent;
+  }
 };
 
 export default createComponentCode;
