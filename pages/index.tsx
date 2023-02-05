@@ -13,7 +13,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <div className="text-red-600">
       <input
         type="file"
         onChange={handleFileChanges}
@@ -34,6 +34,6 @@ export default function Home() {
             />
           ))}
       </div>
-    </>
+    </div>
   );
 }
