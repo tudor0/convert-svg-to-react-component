@@ -1,6 +1,15 @@
+import prettier from "prettier";
+import parserTypeScript from "prettier/parser-typescript";
+import {
+  widthRegex,
+  heightRegex,
+  viewBoxRegex,
+  svgRegex,
+  svgCommentRegex,
+  xmlRegex
+} from "./regexConstants";
+
 const createComponentCode = (code: string, componentName: string) => {
-  const widthRegex = /width="(\d+\S+)"/;
-  const heightRegex = /height="(\d+\S+)"/;
   const width = code.match(widthRegex);
   const height = code.match(heightRegex);
   const widthValue = width && width[1];
@@ -13,16 +22,16 @@ const createComponentCode = (code: string, componentName: string) => {
   }
 
   let modifiedCode = code
-    .replace(/width=".*?"/i, "")
-    .replace(/height=".*?"/i, "")
-    .replace(/viewBox=".*?"/i, "")
+    .replace(widthRegex, "")
+    .replace(heightRegex, "")
+    .replace(viewBoxRegex, "")
     .replace(
-      /<svg/,
+      svgRegex,
       "<svg width={width} height={height} className={className} stroke={stroke} style={style} viewBox={`0 0 ${width} ${height}`}"
     )
-    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(svgCommentRegex, "")
     .replaceAll(/-([a-z])/g, (_, letter) => letter.toUpperCase())
-    .replace(/<\?xml[^?]*\?>/g, "");
+    .replace(xmlRegex, "");
 
   const styleRegex = /style="(.*?)"/g;
   let match;
@@ -65,7 +74,18 @@ const createComponentCode = (code: string, componentName: string) => {
     };
     export default ${componentName};
     `;
-  return componentContent;
+
+  let formattedCode = prettier.format(componentContent, {
+    printWidth: 80,
+    singleQuote: true,
+    jsxSingleQuote: true,
+    trailingComma: "es5",
+    parser: "typescript",
+    bracketSpacing: true,
+    plugins: [parserTypeScript]
+  });
+
+  return formattedCode;
 };
 
 export default createComponentCode;
