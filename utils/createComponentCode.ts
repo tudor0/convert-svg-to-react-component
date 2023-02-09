@@ -6,7 +6,10 @@ import {
   viewBoxRegex,
   svgRegex,
   svgCommentRegex,
-  xmlRegex
+  xmlRegex,
+  xRegex,
+  styleRegex,
+  transformRegex
 } from "./regexConstants";
 
 const createComponentCode = (code: string, componentName: string) => {
@@ -31,9 +34,14 @@ const createComponentCode = (code: string, componentName: string) => {
     )
     .replace(svgCommentRegex, "")
     .replaceAll(/-([a-z])/g, (_, letter) => letter.toUpperCase())
-    .replace(xmlRegex, "");
+    .replace(xmlRegex, "")
+    .replace(xRegex, (match, character) =>
+      match.replace(`:${character}`, `${character.toUpperCase()}`)
+    )
+    .replace(transformRegex, (_, transformValue) => {
+      return `style={{ transform: "${transformValue}" }}`;
+    });
 
-  const styleRegex = /style="(.*?)"/g;
   let match;
   while ((match = styleRegex.exec(modifiedCode)) !== null) {
     const styleString = match[1];
