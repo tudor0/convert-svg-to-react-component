@@ -1,6 +1,23 @@
- <svg
-      width="100"
-      height="133"
+import React from "react";
+
+interface IconProps {
+  width?: number;
+  height?: number;
+  stroke?: string;
+  className?: string;
+  style?: React.CSSProperties;
+}
+const ThreeStepsBGMobile: React.FC<IconProps> = ({
+  width = "302",
+  height = "235",
+  stroke = "none",
+  className,
+  style
+}) => {
+  return (
+    <svg
+      width={width}
+      height={height}
       className={className}
       stroke={stroke}
       style={style}
@@ -103,12 +120,10 @@
         clipRule="evenodd"
         d="M222.403 93.4802L96.125 93.5286L99.47 101.863L225.756 101.822L222.403 93.4802Z"
         fill="#9FA4A8"
-        xlink:href="123"
       />
       <path
         d="M143.913 18.4812H165.587L165.591 18.4836L165.59 18.4812H270.194L222.406 93.4806H201.329L201.327 93.4775L201.326 93.4806H96.125L143.913 18.4812Z"
         fill="#0892D0"
-        xlink:role=""
       />
       <path
         opacity="0.1"
@@ -180,3 +195,6 @@
         fill="#EFBD87"
       />
     </svg>
+  );
+};
+export default ThreeStepsBGMobile;

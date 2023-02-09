@@ -1,10 +1,12 @@
 const styleRegex = /style="(.*?)"/g;
 const svgCommentRegex = /<!--[\s\S]*?-->/g;
 const xmlRegex = /<\?xml[^?]*\?>/g;
-const svgRegex = /svg/;
-const widthRegex = /width="(\d+\S+)"/;
-const heightRegex = /height="(\d+\S+)"/;
+const svgRegex = /<svg/;
+const widthRegex = /width="(\d+(%|em|vw|vh)|\d+)"/;
+const heightRegex = /height="(\d+(%|em|vw|vh)|\d+)"/;
 const viewBoxRegex = /viewBox=".*?"/i;
+const xRegex = /x[\w-]+:([a-zA-Z])/g;
+const transformRegex = /transform="(.*?)"/g;
 
 export {
   styleRegex,
@@ -13,5 +15,7 @@ export {
   svgRegex,
   widthRegex,
   heightRegex,
-  viewBoxRegex
+  viewBoxRegex,
+  xRegex,
+  transformRegex
 };

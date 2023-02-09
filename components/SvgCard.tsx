@@ -3,6 +3,7 @@ import modifyString from "@utils/modifyString";
 import createComponentCode from "@utils/createComponentCode";
 import { useEffect, useState } from "react";
 import DownloadFileButton from "./DownloadFileButton";
+import checkIfNameIsValid from "@/utils/checkComponentName";
 
 const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   const createInitialComponentName = () => {
@@ -15,7 +16,8 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   const [componentCode, setComponentCode] = useState<string | null>("");
 
   useEffect(() => {
-    setComponentName(createInitialComponentName());
+    const initialComponentName = createInitialComponentName();
+    setComponentName(initialComponentName);
 
     return () => {
       setComponentName(null);
