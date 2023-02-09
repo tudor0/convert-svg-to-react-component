@@ -12,6 +12,7 @@ import {
 const createComponentCode = (code: string, componentName: string) => {
   const width = code.match(widthRegex);
   const height = code.match(heightRegex);
+  console.log(height);
   const widthValue = width && width[1];
   const heightValue = height && height[1];
   if (!widthValue || !heightValue) {
@@ -72,7 +73,7 @@ const createComponentCode = (code: string, componentName: string) => {
         ${modifiedCode}
       );
     };
-    export default ${componentName};
+    export default React.memo(${componentName});
     `;
 
   try {
