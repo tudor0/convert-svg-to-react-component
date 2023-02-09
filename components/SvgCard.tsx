@@ -18,7 +18,6 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   useEffect(() => {
     const initialComponentName = createInitialComponentName();
     setComponentName(initialComponentName);
-    console.log(initialComponentName, checkIfNameIsValid(initialComponentName));
 
     return () => {
       setComponentName(null);
