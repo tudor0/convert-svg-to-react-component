@@ -3,13 +3,12 @@ import modifyString from "@utils/modifyString";
 import createComponentCode from "@utils/createComponentCode";
 import { useEffect, useState } from "react";
 import DownloadFileButton from "./DownloadFileButton";
-import checkIfNameIsValid from "@/utils/checkComponentName";
+
 
 const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   const createInitialComponentName = () => {
     const initialName = file.name.split(".")[0];
-    const finalName = modifyString(initialName);
-    return finalName === "" ? "Icon" : finalName;
+    return modifyString(initialName);
   };
 
   const [componentName, setComponentName] = useState<string | null>(null);
@@ -18,7 +17,7 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   useEffect(() => {
     const initialComponentName = createInitialComponentName();
     setComponentName(initialComponentName);
-    console.log(initialComponentName, checkIfNameIsValid(initialComponentName));
+    console.log(initialComponentName);
 
     return () => {
       setComponentName(null);
@@ -37,7 +36,7 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   const handleChangeComponentName = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const validString = modifyString(e.target.value)
+    const validString = modifyString(e.target.value , 'modify')
       .replace(/[^\w\s]/gi, "")
       .replaceAll(" ", "");
     setComponentName(validString);

@@ -5,7 +5,9 @@ const svgRegex = /<svg/;
 const widthRegex = /width="(\d+\S+)"/;
 const heightRegex = /height="(\d+\S+)"/;
 const viewBoxRegex = /viewBox=".*?"/i;
-
+const beginingRegex = /^[^a-zA-Z]+/;
+const symbolsRegex = /[^a-zA-Z0-9_]/g;
+const componentRegex = /^[A-Z][a-zA-Z0-9_]*[^_]$/;
 export {
   styleRegex,
   svgCommentRegex,
@@ -13,5 +15,8 @@ export {
   svgRegex,
   widthRegex,
   heightRegex,
-  viewBoxRegex
+  viewBoxRegex,
+  beginingRegex,
+  symbolsRegex,
+  componentRegex,
 };
