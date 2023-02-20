@@ -4,11 +4,10 @@ import createComponentCode from "@utils/createComponentCode";
 import { useEffect, useState } from "react";
 import DownloadFileButton from "./DownloadFileButton";
 
-
 const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   const createInitialComponentName = () => {
     const initialName = file.name.split(".")[0];
-    return modifyString(initialName);
+    return modifyString(initialName) as string;
   };
 
   const [componentName, setComponentName] = useState<string | null>(null);
@@ -36,10 +35,11 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   const handleChangeComponentName = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const validString = modifyString(e.target.value , 'modify')
+    const validString = modifyString(e.target.value, "modify") as string;
+    const finalString = validString
       .replace(/[^\w\s]/gi, "")
       .replaceAll(" ", "");
-    setComponentName(validString);
+    setComponentName(finalString);
   };
 
   const handleBlurCheck = () => {
