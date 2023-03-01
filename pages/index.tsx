@@ -1,5 +1,6 @@
 import SvgCard from "@/components/SvgCard";
 import { FileProps } from "@/types/types";
+import { Button } from "@/UI";
 import handleFileChange from "@utils/handleFileChange";
 import { ChangeEvent, useState } from "react";
 
@@ -13,7 +14,7 @@ export default function Home() {
   };
 
   return (
-    <div className="text-red-600">
+    <div className="p-3">
       <input
         type="file"
         onChange={handleFileChanges}
@@ -34,6 +35,9 @@ export default function Home() {
             />
           ))}
       </div>
+      <Button variant="tertiary" className="mx-auto w-min" size="small">
+        asdasd
+      </Button>
     </div>
   );
 }

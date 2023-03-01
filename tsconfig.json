@@ -18,6 +18,7 @@
     "paths": {
       "@/*": ["./*"],
       "@utils/*": ["./utils/*"],
+      "@UI/*": ["./UI/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

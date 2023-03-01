@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .btn {
+    @apply text-black rounded-xl flex w-full items-center justify-center bg-transparent normal-case shadow-none hover:scale-105 transition-all active:scale-95;
+  }
+
+  .btn-primary {
+    @apply bg-verdigris text-snow;
+  }
+
+  .btn-secondary {
+    @apply bg-cerise text-snow;
+  }
+  .btn-tertiary {
+    @apply bg-snow text-cerise border border-cerise;
+  }
+
+  .btn-danger {
+    @apply bg-red-500 text-snow;
+  }
+
+  .btn-small {
+    @apply px-6 py-2 text-sm;
+  }
+
+  .btn-medium {
+    @apply py-3 px-8 text-base;
+  }
+
+  .btn-large {
+    @apply py-4 px-10 text-lg;
+  }
+}
