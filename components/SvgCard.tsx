@@ -3,13 +3,12 @@ import modifyString from "@utils/modifyString";
 import createComponentCode from "@utils/createComponentCode";
 import { useEffect, useState } from "react";
 import DownloadFileButton from "./DownloadFileButton";
-import checkIfNameIsValid from "@/utils/checkComponentName";
+import { removeAlphaNumeric } from "@/utils/regexConstants";
 
 const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   const createInitialComponentName = () => {
     const initialName = file.name.split(".")[0];
-    const finalName = modifyString(initialName);
-    return finalName === "" ? "Icon" : finalName;
+    return modifyString(initialName) as string;
   };
 
   const [componentName, setComponentName] = useState<string | null>(null);
@@ -36,10 +35,11 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   const handleChangeComponentName = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const validString = modifyString(e.target.value)
-      .replace(/[^\w\s]/gi, "")
+    const validString = modifyString(e.target.value, "modify") as string;
+    const finalString = validString
+      .replace(removeAlphaNumeric, "")
       .replaceAll(" ", "");
-    setComponentName(validString);
+    setComponentName(finalString);
   };
 
   const handleBlurCheck = () => {

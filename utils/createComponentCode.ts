@@ -7,7 +7,7 @@ import {
   svgRegex,
   svgCommentRegex,
   xmlRegex,
-  xRegex,
+  minusPlusLetter,
   styleRegex,
   transformRegex
 } from "./regexConstants";
@@ -34,10 +34,10 @@ const createComponentCode = (code: string, componentName: string) => {
     )
     .replace(svgCommentRegex, "")
     .replaceAll(/-([a-z])/g, (_, letter) => letter.toUpperCase())
-    .replace(xmlRegex, "")
-    .replace(xRegex, (match, character) =>
+    .replace(xmlRegex, (match, character) =>
       match.replace(`:${character}`, `${character.toUpperCase()}`)
     )
+    .replaceAll(minusPlusLetter, (_, letter) => letter.toUpperCase())
     .replace(transformRegex, (_, transformValue) => {
       return `style={{ transform: "${transformValue}" }}`;
     });
