@@ -37,6 +37,7 @@ const createComponentCode = (code: string, componentName: string) => {
     .replace(xmlRegex, (match, character) =>
       match.replace(`:${character}`, `${character.toUpperCase()}`)
     )
+    .replaceAll(minusPlusLetter, (_, letter) => letter.toUpperCase())
     .replace(transformRegex, (_, transformValue) => {
       return `style={{ transform: "${transformValue}" }}`;
     });
