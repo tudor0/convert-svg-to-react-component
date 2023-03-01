@@ -8,13 +8,13 @@ import {
   svgCommentRegex,
   xmlRegex,
   minusPlusLetter,
-  styleRegex
+  styleRegex,
+  transformRegex
 } from "./regexConstants";
 
 const createComponentCode = (code: string, componentName: string) => {
   const width = code.match(widthRegex);
   const height = code.match(heightRegex);
-  console.log(height);
   const widthValue = width && width[1];
   const heightValue = height && height[1];
   if (!widthValue || !heightValue) {
@@ -33,8 +33,13 @@ const createComponentCode = (code: string, componentName: string) => {
       "<svg width={width} height={height} className={className} stroke={stroke} style={style} viewBox={`0 0 ${width} ${height}`}"
     )
     .replace(svgCommentRegex, "")
-    .replaceAll(minusPlusLetter, (_, letter) => letter.toUpperCase())
-    .replace(xmlRegex, "");
+    .replaceAll(/-([a-z])/g, (_, letter) => letter.toUpperCase())
+    .replace(xmlRegex, (match, character) =>
+      match.replace(`:${character}`, `${character.toUpperCase()}`)
+    )
+    .replace(transformRegex, (_, transformValue) => {
+      return `style={{ transform: "${transformValue}" }}`;
+    });
 
   let match;
   while ((match = styleRegex.exec(modifiedCode)) !== null) {
