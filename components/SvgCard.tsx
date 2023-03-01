@@ -3,6 +3,7 @@ import modifyString from "@utils/modifyString";
 import createComponentCode from "@utils/createComponentCode";
 import { useEffect, useState } from "react";
 import DownloadFileButton from "./DownloadFileButton";
+import { removeAlphaNumeric } from "@/utils/regexConstants";
 
 const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   const createInitialComponentName = () => {
@@ -37,7 +38,7 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   ) => {
     const validString = modifyString(e.target.value, "modify") as string;
     const finalString = validString
-      .replace(/[^\w\s]/gi, "")
+      .replace(removeAlphaNumeric, "")
       .replaceAll(" ", "");
     setComponentName(finalString);
   };

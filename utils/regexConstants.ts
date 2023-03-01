@@ -8,6 +8,10 @@ const viewBoxRegex = /viewBox=".*?"/i;
 const beginingRegex = /^[^a-zA-Z]+/;
 const symbolsRegex = /[^a-zA-Z0-9_]/g;
 const componentRegex = /^[A-Z][a-zA-Z0-9_]*[^_]$/;
+const minusPlusLetter = /-([a-z])/g;
+const removeAlphaNumeric = /[^\w\s]/gi;
+
+
 export {
   styleRegex,
   svgCommentRegex,
@@ -19,4 +23,6 @@ export {
   beginingRegex,
   symbolsRegex,
   componentRegex,
+  minusPlusLetter,
+  removeAlphaNumeric,
 };

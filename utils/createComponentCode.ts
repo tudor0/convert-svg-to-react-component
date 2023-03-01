@@ -6,7 +6,9 @@ import {
   viewBoxRegex,
   svgRegex,
   svgCommentRegex,
-  xmlRegex
+  xmlRegex,
+  minusPlusLetter,
+  styleRegex
 } from "./regexConstants";
 
 const createComponentCode = (code: string, componentName: string) => {
@@ -31,10 +33,9 @@ const createComponentCode = (code: string, componentName: string) => {
       "<svg width={width} height={height} className={className} stroke={stroke} style={style} viewBox={`0 0 ${width} ${height}`}"
     )
     .replace(svgCommentRegex, "")
-    .replaceAll(/-([a-z])/g, (_, letter) => letter.toUpperCase())
+    .replaceAll(minusPlusLetter, (_, letter) => letter.toUpperCase())
     .replace(xmlRegex, "");
 
-  const styleRegex = /style="(.*?)"/g;
   let match;
   while ((match = styleRegex.exec(modifiedCode)) !== null) {
     const styleString = match[1];
