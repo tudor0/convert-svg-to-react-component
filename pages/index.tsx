@@ -13,14 +13,15 @@ export default function Home() {
   };
 
   return (
-    <div className="text-red-600">
-      <input
+    <div className="text-white bg-black h-screen">
+      <input className="outline-none bg-verdigris file:bg-verdigris"
         type="file"
         onChange={handleFileChanges}
         multiple={true}
         accept="image/svg+xml"
+        
       />
-      <button onClick={() => setConverted(true)} disabled={files.length === 0}>
+      <button className="bg-verdigris cursor-pointer outline-none"onClick={() => setConverted(true)} disabled={files.length === 0}>
         Convert to components
       </button>
       <div>

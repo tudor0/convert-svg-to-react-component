@@ -51,7 +51,7 @@ const SvgCard: React.FC<SvgCardProps> = ({ code, file, converted }) => {
   return (
     <>
       <h2>Component name: {componentName}</h2>
-      <input
+      <input 
         type="text"
         onChange={handleChangeComponentName}
         onBlur={handleBlurCheck}
